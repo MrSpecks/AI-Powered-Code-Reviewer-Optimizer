@@ -171,6 +171,7 @@ REFACTOR_SCHEMA = {
                     "unified_diff": {"type": "string"},
                     "risk": {"type": "string", "enum": ["low", "medium", "high"]},
                     "tests_needed": {"type": "array", "items": {"type": "string"}}
+                }
             }
         },
         "meta": {"type": "object"}
