@@ -5,7 +5,7 @@ Loads templates from repository .txt files and assembles prompts with placeholde
 
 import os
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import json
 
 class PromptTemplates:
