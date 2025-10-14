@@ -1,0 +1,22 @@
+Purpose: Auto-generate unit tests and edge-case tests for functions.
+
+User prompt template:
+
+INPUT:
+- language: {language}
+- filename: {filename}
+- file_content: """{file_content}"""
+- target_function_or_lines: {start_line}-{end_line}
+- testing_framework: {pytest|jest}
+- examples: [ {input: ..., output: ...}, ... ]    // optional
+
+TASK:
+1. Produce a test file (runnable) covering:
+   - basic cases (from examples if provided)
+   - edge cases (empty inputs, None, large inputs, invalid types)
+   - at least one assertion per major branch
+2. For random input / fuzz cases, provide one property-based test suggestion (optional).
+3. Keep tests deterministic and avoid external network or file I/O.
+
+REQUESTED OUTPUT FORMAT:
+Return JSON with { "filename", "test_filename", "test_content", "required_mocks":[], "meta":{...} }

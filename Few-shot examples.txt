@@ -1,0 +1,76 @@
+I'll give small Python examples for review + refactor + test generation. Keep them short so model learns format.
+
+Example A — REVIEW few-shot (Python)
+
+Prompt context: language=python, filename=math_utils.py, file_content:
+
+def sum_list(nums):
+    total = 0
+    for i in range(len(nums)):
+        total += nums[i]
+    return total
+
+
+static_output from flake8: E741 ambiguous variable name 'l' (ignore), none otherwise.
+
+Expected JSON (trimmed):
+
+{
+  "filename": "math_utils.py",
+  "language": "python",
+  "summary": {
+    "complexityScore": 15,
+    "maintainability": "high",
+    "quick_actions": [
+      "Use direct iteration instead of index-based loop.",
+      "Add type hints and docstring to function."
+    ]
+  },
+  "findings": [
+    {
+      "id": "readability-loop-index",
+      "category": "readability",
+      "severity": "low",
+      "location": { "start_line": 1, "end_line": 4 },
+      "description": "Function uses index-based loop where direct iteration is clearer.",
+      "evidence": "lines 2-3: for i in range(len(nums)): total += nums[i]",
+      "suggested_fix_summary": "Rewrite loop as 'for n in nums: total += n' or use sum(nums).",
+      "confidence": "high"
+    }
+  ],
+  "meta": { "analysis_time_ms": 120 }
+}
+
+
+Example B — REFACTOR few-shot (Python, readability)
+
+Input target lines: function above.
+
+Expected JSON (trimmed):
+
+{
+  "filename": "math_utils.py",
+  "language": "python",
+  "alternatives": [
+    {
+      "mode": "readability",
+      "rationale": "Use built-in sum and add type hints for clarity.",
+      "unified_diff": "--- a/math_utils.py\n+++ b/math_utils.py\n@@ -1,4 +1,5 @@\n-def sum_list(nums):\n-    total = 0\n-    for i in range(len(nums)):\n-        total += nums[i]\n-    return total\n+from typing import Iterable\n+\n+def sum_list(nums: Iterable[float]) -> float:\n+    \"\"\"Return the sum of numbers in nums.\"\"\"\n+    return sum(nums)\n",
+      "risk": "low",
+      "tests_needed": ["test_sum_list_basic", "test_sum_list_empty", "test_sum_list_types"]
+    }
+  ],
+  "meta": { "analysis_time_ms": 210 }
+}
+
+
+Example C — TEST GENERATION few-shot (pytest)
+
+Expected JSON (trimmed):
+
+{
+  "filename": "math_utils.py",
+  "test_filename": "test_math_utils.py",
+  "test_content": "import pytest\nfrom math_utils import sum_list\n\ndef test_sum_list_basic():\n    assert sum_list([1,2,3]) == 6\n\ndef test_sum_list_empty():\n    assert sum_list([]) == 0\n\ndef test_sum_list_types():\n    assert sum_list([1.5, 2.5]) == 4.0\n",
+  "required_mocks": []
+}

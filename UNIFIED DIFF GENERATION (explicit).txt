@@ -1,0 +1,14 @@
+Purpose: When you already know the desired refactor or change; output a valid unified diff.
+
+User prompt template:
+
+INPUT:
+- filename: {filename}
+- original: """{file_content}"""
+- modified: """{modified_file_content}"""   // apply refactor and produce diff
+
+TASK:
+Create a unified diff patch between original and modified. Use standard format (--- a/{filename}, +++ b/{filename}, @@ -start,len +start,len @@ ...).
+
+REQUESTED OUTPUT FORMAT:
+Return JSON with { "filename", "unified_diff": "..." }

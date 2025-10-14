@@ -1,0 +1,18 @@
+Purpose: SAST-like reasoning combining bandit/semgrep results + LLM checks.
+
+User prompt template:
+
+INPUT:
+- language
+- filename
+- file_content
+- static_security_output  // e.g., bandit or semgrep JSON lines
+- allowed_risk_level: {low|medium|high}
+
+TASK:
+1. Combine static_security_output and code scan to produce explicit security findings.
+2. For each finding include: id, severity, CWE (if identifiable), location, exploitability (low|medium|high), suggested_mitigation steps (exact code snippets if possible).
+3. If a vulnerability requires runtime context or secret values to verify, mark as "requires-run" and explain what runtime conditions needed.
+
+REQUESTED OUTPUT FORMAT:
+Return JSON with keys: { "filename", "security_findings":[...], "recommendations":[...], "meta":{...} }

@@ -1,0 +1,29 @@
+
+(3 modes: minimal-change, readability-first, performance-first)
+
+Purpose: Produce alternative refactors. Provide unified diffs and short rationale.
+
+User prompt template (replace <MODE>):
+
+INPUT:
+- language: {language}
+- filename: {filename}
+- file_content: """{file_content}"""
+- target_function_or_lines: {start_line}-{end_line}
+- mode: <MODE>              // one of: minimal, readability, performance
+- max_alternatives: 2       // optional
+
+TASK:
+Refactor only the code within the indicated lines according to mode:
+- minimal: smallest change achieving correctness & style improvements.
+- readability: prioritize clear naming, structure, and comments — aim for maintainability even if more LOC.
+- performance: target CPU/IO efficiency improvements; maintain correct behavior and add micro-benchmarks if reasonable.
+
+For each alternative:
+- produce "rationale" (1-3 sentences)
+- produce "unified_diff" (unified diff patch with file path)
+- produce "risk" (low|medium|high) explaining potential regression areas
+- produce "tests_needed" (list of recommended test cases for regression)
+
+REQUESTED OUTPUT FORMAT:
+Return JSON exactly with keys: { "filename", "language", "alternatives":[{...}], "meta":{...} }

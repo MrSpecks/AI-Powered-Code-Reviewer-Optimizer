@@ -1,0 +1,34 @@
+JSON output schema (canonical)
+
+Use this schema to validate outputs automatically. Put this in the prompt as a MUST-FOLLOW.
+
+Top-level keys (choose appropriate for task):
+
+filename (string)
+
+language (string)
+
+summary (object) — for REVIEW
+
+complexityScore (number 0-100)
+
+maintainability ("low"|"medium"|"high")
+
+quick_actions (array of strings)
+
+findings (array of objects)
+
+id, category, severity, location {start_line,end_line}, description, evidence, suggested_fix_summary, confidence
+
+alternatives (array) — for REFACTOR
+
+mode, rationale, unified_diff, risk, tests_needed (array)
+
+test_filename, test_content — for TEST GENERATION
+
+security_findings — for SECURITY ANALYSIS
+
+meta — {analysis_time_ms, model, model_confidence?}
+
+Enforce JSON.parse(...) in your backend to check correctness and fail fast if not parseable.
+

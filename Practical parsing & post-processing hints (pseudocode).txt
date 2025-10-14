@@ -1,0 +1,10 @@
+resp = call_model(prompt)
+try:
+    parsed = json.loads(resp)
+except JSONDecodeError:
+    // fallback: try to extract JSON block in response via regex { ... }
+validate_schema(parsed)
+apply_patches(parsed.get("alternatives", []))
+
+
+If model fails to return pure JSON, retry once with an instruction: "ERROR RECOVERY: Your previous response was not pure JSON. You MUST return valid JSON only." — then re-call with same system message and previous assistant output included as context.

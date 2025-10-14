@@ -1,0 +1,31 @@
+Purpose: Give a prioritized, evidence-backed review across readability, efficiency, security, and style.
+
+User prompt template:
+
+INPUT:
+- language: {language}                           // e.g., "python" or "javascript"
+- filename: {filename}
+- file_content: """{file_content}"""
+- static_output: {static_output}                 // JSON or text from flake8/pylint/eslint/bandit, include line numbers
+- context: {optional project/context notes}
+- max_findings: {N}                              // default 6
+- tone: concise
+
+TASK:
+1. Read the provided file_content and static_output.
+2. Produce up to {N} prioritized findings. Each finding must include:
+   - id (short slug)
+   - category (readability | efficiency | security | style | correctness)
+   - severity (low | medium | high | critical)
+   - location (start_line, end_line)
+   - description (short)
+   - evidence (quote lines or static_output lines)
+   - suggested_fix_summary (1-2 sentences)
+   - confidence (low | medium | high)
+3. Provide an overall file-level summary with:
+   - complexityScore (0-100)
+   - maintainability (low | medium | high)
+   - quick_actions: list of up to 3 highest-impact actions (one-line each)
+
+REQUESTED OUTPUT FORMAT:
+Return JSON exactly with keys: { "filename", "language", "summary", "findings":[...], "quick_actions":[...], "meta":{...} }

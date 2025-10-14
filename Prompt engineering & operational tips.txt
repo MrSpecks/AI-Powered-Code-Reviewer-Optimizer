@@ -1,0 +1,65 @@
+Prompt engineering & operational tips
+
+Provide static analyzer output: always include flake8/pylint/eslint/bandit outputs as structured JSON or annotated text with line numbers. The LLM should use these as evidence and echo line numbers.
+
+Chunking: for large files (> token limit):
+
+Break into function-level chunks, include top-level file context (imports, class definitions) in each chunk’s prompt header.
+
+Ask model to analyze each chunk and produce chunk-level outputs. Aggregate scores later with a small combiner prompt that consumes chunk outputs.
+
+Temperature & model selection:
+
+Audit/Precise tasks (review, security, unified diff): temperature=0.0 to 0.2.
+
+Creative / multiple refactor ideas: temperature=0.2 to 0.5.
+
+Test generation: temperature=0.0 to 0.2.
+
+Use max_tokens proportional to expected output. For diffs and tests, request extra headroom (e.g., 1500–3000 tokens).
+
+Model routing:
+
+Cheap model (fast): summarize static analyzer output and produce quick findings.
+
+Stronger model: produce refactors and security reasoning.
+
+Ensemble: run two models and vote/merge (cheap for lint + expensive for refactor).
+
+Few-shot in system prompt: include 1–2 short examples (like the ones above) to reduce format errors.
+
+Confidence flags: encourage confidence field to signal whether suggestion is safe to auto-apply (confidence == high) or should be manual (low).
+
+Handling hallucinations & verification
+
+Always cross-check LLM suggestions against static analyzer evidence. If the model suggests removing a function or changing an API, require an additional “evidence” field linking to line ranges or static-output entries.
+
+For security-critical suggestions, require confidence: high and a static-tool match (bandit/semgrep) before recommending auto-apply.
+
+Example combined workflow call (short)
+
+Run flake8/bandit → gather JSON results.
+
+Chunk file to functions (if large).
+
+Call REVIEW template with static_output and temperature=0.0.
+
+For top 2 findings that need code edits, call REFACTOR template with mode=readability and temperature=0.1.
+
+Call TEST GENERATION for changed functions.
+
+Combine outputs into final report JSON.
+
+Final checklist before you call the model
+
+ Attach file_content exactly (no truncation) or send chunking metadata.
+
+ Attach static_output in structured format (JSON array of {line, tool, message}).
+
+ Set temperature per task.
+
+ Choose a model with sufficient token budget for diffs/tests.
+
+ Include max_findings and mode parameters as needed.
+
+ Ensure system message (above) is the active system promp
