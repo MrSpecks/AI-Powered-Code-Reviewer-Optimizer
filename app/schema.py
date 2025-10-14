@@ -124,6 +124,7 @@ REVIEW_SCHEMA = {
                 "complexityScore": {"type": "number", "minimum": 0, "maximum": 100},
                 "maintainability": {"type": "string", "enum": ["low", "medium", "high"]},
                 "quick_actions": {"type": "array", "items": {"type": "string"}}
+            }
         },
         "findings": {
             "type": "array",
