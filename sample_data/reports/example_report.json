@@ -1,0 +1,122 @@
+{
+  "filename": "math_utils.py",
+  "language": "python",
+  "timestamp": 1704067200.0,
+  "static_analysis": {
+    "filename": "math_utils.py",
+    "language": "python",
+    "tools_used": ["flake8", "radon"],
+    "issues": [
+      {
+        "tool": "flake8",
+        "line": 8,
+        "column": 4,
+        "code": "E741",
+        "message": "ambiguous variable name 'l'",
+        "severity": "error"
+      }
+    ],
+    "metrics": {
+      "cyclomatic_complexity": 3,
+      "maintainability_index": 85,
+      "functions": [
+        {
+          "name": "sum_list",
+          "complexity": 2,
+          "line": 4
+        },
+        {
+          "name": "multiply",
+          "complexity": 1,
+          "line": 9
+        },
+        {
+          "name": "divide",
+          "complexity": 2,
+          "line": 14
+        },
+        {
+          "name": "factorial",
+          "complexity": 3,
+          "line": 20
+        },
+        {
+          "name": "is_prime",
+          "complexity": 2,
+          "line": 28
+        }
+      ]
+    },
+    "warnings": []
+  },
+  "review": {
+    "filename": "math_utils.py",
+    "language": "python",
+    "summary": {
+      "complexityScore": 25,
+      "maintainability": "high",
+      "quick_actions": [
+        "Use direct iteration instead of index-based loop in sum_list function",
+        "Add type hints and docstrings to all functions",
+        "Consider using built-in sum() function for better readability"
+      ]
+    },
+    "findings": [
+      {
+        "id": "readability-loop-index",
+        "category": "readability",
+        "severity": "low",
+        "location": {
+          "start_line": 4,
+          "end_line": 7
+        },
+        "description": "Function uses index-based loop where direct iteration is clearer",
+        "evidence": "lines 5-6: for i in range(len(nums)): total += nums[i]",
+        "suggested_fix_summary": "Rewrite loop as 'for n in nums: total += n' or use sum(nums)",
+        "confidence": "high"
+      },
+      {
+        "id": "missing-type-hints",
+        "category": "style",
+        "severity": "medium",
+        "location": {
+          "start_line": 4,
+          "end_line": 7
+        },
+        "description": "Function lacks type hints for parameters and return value",
+        "evidence": "def sum_list(nums):",
+        "suggested_fix_summary": "Add type hints: def sum_list(nums: List[float]) -> float:",
+        "confidence": "high"
+      },
+      {
+        "id": "missing-docstring",
+        "category": "style",
+        "severity": "low",
+        "location": {
+          "start_line": 4,
+          "end_line": 7
+        },
+        "description": "Function lacks docstring documentation",
+        "evidence": "def sum_list(nums):",
+        "suggested_fix_summary": "Add docstring describing function purpose and parameters",
+        "confidence": "high"
+      }
+    ],
+    "meta": {
+      "analysis_time_ms": 1250,
+      "model": "gpt-4o-mini",
+      "model_confidence": 0.95
+    }
+  },
+  "refactors": [],
+  "tests": {
+    "filename": "math_utils.py",
+    "test_filename": "test_math_utils.py",
+    "test_content": "import pytest\nfrom math_utils import sum_list, multiply, divide, factorial, is_prime, Calculator\n\n\ndef test_sum_list_basic():\n    assert sum_list([1, 2, 3]) == 6\n\n\ndef test_sum_list_empty():\n    assert sum_list([]) == 0\n\n\ndef test_sum_list_types():\n    assert sum_list([1.5, 2.5]) == 4.0\n\n\ndef test_multiply():\n    assert multiply(3, 4) == 12\n    assert multiply(0, 5) == 0\n    assert multiply(-2, 3) == -6\n\n\ndef test_divide():\n    assert divide(10, 2) == 5\n    assert divide(0, 5) == 0\n    \n\ndef test_divide_by_zero():\n    with pytest.raises(ValueError, match=\"Cannot divide by zero\"):\n        divide(5, 0)\n\n\ndef test_factorial():\n    assert factorial(0) == 1\n    assert factorial(1) == 1\n    assert factorial(5) == 120\n    \n\ndef test_factorial_negative():\n    with pytest.raises(ValueError, match=\"Factorial is not defined for negative numbers\"):\n        factorial(-1)\n\n\ndef test_is_prime():\n    assert is_prime(2) == True\n    assert is_prime(3) == True\n    assert is_prime(4) == False\n    assert is_prime(17) == True\n    assert is_prime(1) == False\n\n\ndef test_calculator():\n    calc = Calculator()\n    assert calc.add(2, 3) == 5\n    assert calc.subtract(5, 2) == 3\n    assert len(calc.get_history()) == 2\n",
+    "required_mocks": [],
+    "meta": {
+      "analysis_time_ms": 850,
+      "model": "gpt-4o-mini"
+    }
+  }
+}
